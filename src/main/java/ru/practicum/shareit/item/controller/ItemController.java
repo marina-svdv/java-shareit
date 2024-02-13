@@ -54,6 +54,7 @@ public class ItemController {
         List<Item> items = itemService.getAllItemsByOwner(userId);
         return items.stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
+
     @GetMapping("/search")
     public List<ItemDto> getItemsBySubstring(@RequestParam String text) {
         List<Item> items = itemService.getItemsBySubstring(text);
