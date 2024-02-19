@@ -17,4 +17,8 @@ public interface ItemRepository {
     List<Item> findAllByOwnerId(Long ownerId);
 
     List<Item> findBySubstring(String text);
+
+    boolean isItemPresent(long itemId);
+
+    boolean isItemBelongOwner(long itemId, long ownerId);
 }

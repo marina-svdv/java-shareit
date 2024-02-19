@@ -60,4 +60,12 @@ public class ItemRepositoryImpl implements ItemRepository {
                         item.getDescription().toLowerCase().contains(query))
                 .collect(Collectors.toList());
     }
+
+    public boolean isItemPresent(long itemId) {
+        return (items.get(itemId) != null);
+    }
+
+    public boolean isItemBelongOwner(long itemId, long ownerId) {
+        return items.get(itemId).getOwnerId().equals(ownerId);
+    }
 }

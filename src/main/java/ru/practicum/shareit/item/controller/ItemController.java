@@ -34,12 +34,8 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(@PathVariable long itemId, @RequestBody ItemDto itemDto,
                               @RequestHeader("X-Sharer-User-Id") Long userId) {
-        Item existingItem = itemService.getItemById(itemId);
-        if (existingItem == null || !Objects.equals(existingItem.getOwnerId(), userId)) {
-            throw new UserNotFoundException();
-        }
         Item itemToUpdate = ItemMapper.toItem(itemDto, userId);
-        Item updatedItem = itemService.updateItem(itemToUpdate, itemId);
+        Item updatedItem = itemService.updateItem(itemToUpdate, itemId, userId);
         return ItemMapper.toItemDto(updatedItem);
     }
 
