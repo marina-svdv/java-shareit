@@ -19,12 +19,12 @@ public class UserController {
 
     @PostMapping
     public UserDto createUser(@Valid @RequestBody UserDto userDto) {
-        return UserMapper.toUserDto(userService.createUser(UserMapper.toUser(userDto)));
+        return UserMapper.toUserDto(userService.saveUser(UserMapper.toUser(userDto)));
     }
 
     @PatchMapping("/{userId}")
     public UserDto updateUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
-        return UserMapper.toUserDto(userService.updateUser(userId, UserMapper.toUser(userDto)));
+        return UserMapper.toUserDto(userService.updateUser(userId, UserMapper.toUser(userDto, userId)));
     }
 
     @GetMapping("/{userId}")

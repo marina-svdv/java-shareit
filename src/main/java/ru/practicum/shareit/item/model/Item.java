@@ -2,21 +2,32 @@ package ru.practicum.shareit.item.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.user.model.User;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
+@Entity
+@Table(name = "items")
 public class Item {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank(message = "Name must not be blank")
+    @Column(nullable = false, length = 255)
     private String name;
-    @Size(max = 200, message = "Description must be less than 200 characters")
-    @NotBlank(message = "Description must not be blank")
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
-    @NotNull
+
+    @Column(nullable = false)
     private Boolean available;
-    private Long ownerId;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 }
