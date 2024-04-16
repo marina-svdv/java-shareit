@@ -11,6 +11,7 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findAllByOwnerId(Long ownerId, Sort sort);
+
     @Query("SELECT i FROM Item i WHERE LOWER(i.name) LIKE LOWER(concat('%', ?1, '%')) " +
             "OR LOWER(i.description) LIKE LOWER(concat('%', ?1, '%'))")
     List<Item> findBySubstring(String text);
