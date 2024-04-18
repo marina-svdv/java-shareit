@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserService {
 
-    User createUser(User user);
+    User saveUser(User user);
 
     User updateUser(Long userId, User updatedUser) throws IllegalArgumentException;
 
@@ -15,4 +15,6 @@ public interface UserService {
     List<User> getAllUsers();
 
     void deleteUser(Long userId);
+
+    boolean isUserExist(long bookingId);
 }

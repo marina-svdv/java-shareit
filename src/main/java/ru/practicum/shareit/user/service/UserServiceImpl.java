@@ -15,22 +15,23 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User createUser(User user) {
-        return userRepository.create(user);
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
     @Override
     public User updateUser(Long userId, User updatedUser) {
-        return userRepository.update(userId, updatedUser);
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        userToUpdate.setEmail(updatedUser.getEmail() != null ? updatedUser.getEmail() : userToUpdate.getEmail());
+        userToUpdate.setName(updatedUser.getName() != null ? updatedUser.getName() : userToUpdate.getName());
+        return userRepository.save(userToUpdate);
     }
 
     @Override
     public User getUserById(Long userId) {
-        User user = userRepository.findById(userId);
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
-        return user;
+        return userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
@@ -40,9 +41,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
-        if (userRepository.findById(userId) == null) {
-            throw new IllegalArgumentException("User with id " + userId + " not found.");
-        }
-        userRepository.delete(userId);
+        userRepository.deleteById(userId);
+    }
+
+    @Override
+    public boolean isUserExist(long userId) {
+        return userRepository.existsById(userId);
     }
 }

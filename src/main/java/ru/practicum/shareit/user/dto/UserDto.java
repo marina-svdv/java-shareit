@@ -10,8 +10,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class UserDto {
     private Long id;
+
     @NotBlank(message = "Name must not be blank")
     private String name;
+
     @Email
     @NotBlank(message = "Email must not be blank")
     private String email;
