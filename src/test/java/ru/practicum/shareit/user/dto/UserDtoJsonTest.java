@@ -50,7 +50,7 @@ public class UserDtoJsonTest {
         UserDto userDto = new UserDto(1L, "User User", "not-email");
         Set<ConstraintViolation<UserDto>> violations = validator.validate(userDto);
         assertThat(violations).hasSize(1);
-        assertThat(violations.iterator().next().getMessage()).contains("должно иметь формат адреса электронной почты");
+        assertThat(violations.iterator().next().getMessage()).contains("must be a well-formed email address");
     }
 
     @Test

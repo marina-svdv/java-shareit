@@ -101,6 +101,6 @@ public class ItemDtoJsonTest {
 
         Set<ConstraintViolation<ItemDto>> violations = validator.validate(itemDto);
         assertThat(violations).hasSize(1);
-        assertThat(violations.iterator().next().getMessage()).isEqualTo("не должно равняться null");
+        assertThat(violations.iterator().next().getMessage()).isEqualTo("must not be null");
     }
 }

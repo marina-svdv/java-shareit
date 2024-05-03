@@ -16,7 +16,7 @@ public class ItemRequestDto {
 
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "must not be blank")
     private String description;
     private Long requesterId;
     private LocalDateTime created;

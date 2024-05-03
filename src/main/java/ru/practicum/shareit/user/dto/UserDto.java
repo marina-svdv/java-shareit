@@ -16,7 +16,7 @@ public class UserDto {
     @NotBlank(message = "Name must not be blank")
     private String name;
 
-    @Email
+    @Email(message = "must be a well-formed email address")
     @NotBlank(message = "Email must not be blank")
     private String email;
 }

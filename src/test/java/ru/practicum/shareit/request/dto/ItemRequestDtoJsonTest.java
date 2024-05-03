@@ -54,6 +54,6 @@ public class ItemRequestDtoJsonTest {
                 LocalDateTime.now(), List.of());
         Set<ConstraintViolation<ItemRequestDto>> violations = validator.validate(itemRequestDto);
         assertThat(violations).isNotEmpty();
-        assertThat(violations.iterator().next().getMessage()).contains("не должно быть пустым");
+        assertThat(violations.iterator().next().getMessage()).contains("must not be blank");
     }
 }

@@ -24,7 +24,7 @@ public class ItemDto {
     @NotBlank(message = "Description must not be blank")
     private String description;
 
-    @NotNull
+    @NotNull(message = "must not be null")
     private Boolean available;
     private Long ownerId;
     private BookingDto lastBooking;
