@@ -1,10 +1,10 @@
 package ru.practicum.shareit.item.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-
-import java.util.List;
 
 public interface ItemService {
 
@@ -14,11 +14,9 @@ public interface ItemService {
 
     ItemDto getItemById(Long itemId, Long userId);
 
-    List<Item> getAllItemsByOwner(Long userId);
+    Page<ItemDto> getAllItemsWithBookingDetails(Long ownerId, Pageable pageable);
 
-    List<ItemDto> getItemsWithBookingDetails(Long ownerId);
-
-    List<Item> getItemsBySubstring(String text);
+    Page<ItemDto> getItemsBySubstring(String text, Pageable pageable);
 
     boolean isItemPresent(long itemId);
 

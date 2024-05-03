@@ -2,7 +2,8 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -82,48 +83,60 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> getAllBookingsByBooker(Long bookerId, String state) {
+    public Page<BookingDto> getAllBookingsByBooker(Long bookerId, String state, Pageable pageable) {
         if (!userRepository.existsById(bookerId)) {
             throw new UserNotFoundException();
         }
         LocalDateTime now = LocalDateTime.now();
         switch (state.toUpperCase()) {
             case "ALL":
-                return bookingRepository.findAllByBookerId(bookerId, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByBookerId(bookerId, pageable).
+                        map(bookingMapper::toBookingDto);
             case "WAITING":
-                return bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.WAITING, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.WAITING, pageable).
+                        map(bookingMapper::toBookingDto);
             case "REJECTED":
-                return bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.REJECTED, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.REJECTED, pageable).
+                        map(bookingMapper::toBookingDto);
             case "PAST":
-                return bookingRepository.findAllByBookerIdAndEndBefore(bookerId, now, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByBookerIdAndEndBefore(bookerId, now, pageable).
+                        map(bookingMapper::toBookingDto);
             case "FUTURE":
-                return bookingRepository.findAllByBookerIdAndStartAfter(bookerId, now, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByBookerIdAndStartAfter(bookerId, now, pageable).
+                        map(bookingMapper::toBookingDto);
             case "CURRENT":
-                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfter(bookerId, now, now, Sort.by(Sort.Direction.ASC, "id"));
+                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfter(bookerId, now, now, pageable).
+                        map(bookingMapper::toBookingDto);
             default:
                 throw new IllegalArgumentException("Unknown state: " + state);
         }
     }
 
     @Override
-    public List<Booking> getAllBookingsByOwner(Long ownerId, String state) {
+    public Page<BookingDto> getAllBookingsByOwner(Long ownerId, String state, Pageable pageable) {
         if (!userRepository.existsById(ownerId)) {
             throw new UserNotFoundException();
         }
         LocalDateTime now = LocalDateTime.now();
         switch (state.toUpperCase()) {
             case "ALL":
-                return bookingRepository.findAllByOwnerId(ownerId, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByOwnerId(ownerId, pageable).
+                                map(bookingMapper::toBookingDto);
             case "WAITING":
-                return bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.WAITING, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.WAITING, pageable).
+                                map(bookingMapper::toBookingDto);
             case "REJECTED":
-                return bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.REJECTED, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.REJECTED, pageable).
+                                map(bookingMapper::toBookingDto);
             case "PAST":
-                return bookingRepository.findAllByOwnerIdAndEndBefore(ownerId, now, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByOwnerIdAndEndBefore(ownerId, now, pageable).
+                                map(bookingMapper::toBookingDto);
             case "FUTURE":
-                return bookingRepository.findAllByOwnerIdAndStartAfter(ownerId, now, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByOwnerIdAndStartAfter(ownerId, now, pageable).
+                                map(bookingMapper::toBookingDto);
             case "CURRENT":
-                return bookingRepository.findAllByOwnerIdAndStartBeforeAndEndAfter(ownerId, now, now, Sort.by(Sort.Direction.DESC, "id"));
+                return bookingRepository.findAllByOwnerIdAndStartBeforeAndEndAfter(ownerId, now, now, pageable).
+                                map(bookingMapper::toBookingDto);
             default:
                 throw new IllegalArgumentException("Unknown state: " + state);
         }

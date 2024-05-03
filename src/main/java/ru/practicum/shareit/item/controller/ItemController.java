@@ -1,6 +1,11 @@
 package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -11,8 +16,8 @@ import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/items")
@@ -41,20 +46,29 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getAllItemsByOwner(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemService.getItemsWithBookingDetails(userId);
+    public List<ItemDto> getAllItemsByOwner(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size,
+                                            @RequestHeader("X-Sharer-User-Id") Long userId) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").descending());
+        Page<ItemDto> pageResult = itemService.getAllItemsWithBookingDetails(userId, pageable);
+        return pageResult.getContent();
     }
 
     @GetMapping("/search")
-    public List<ItemDto> getItemsBySubstring(@RequestParam String text) {
-        List<Item> items = itemService.getItemsBySubstring(text);
-        return items.stream().map(itemMapper::toItemDto).collect(Collectors.toList());
+    public List<ItemDto> getItemsBySubstring(@RequestParam String text,
+                                             @RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ItemDto> pageResult = itemService.getItemsBySubstring(text, pageable);
+        return pageResult.getContent();
     }
 
     @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@PathVariable Long itemId, @Valid @RequestBody CommentDto commentDto,
                                  @RequestHeader("X-Sharer-User-Id") Long userId) {
         commentDto.setAuthorId(userId);
-        return itemService.addComment(itemId, commentDto);
+        CommentDto response = itemService.addComment(itemId, commentDto);
+        log.info("Returning from addComment: {}", response);
+        return response;
     }
 }
