@@ -90,23 +90,23 @@ public class BookingServiceImpl implements BookingService {
         LocalDateTime now = LocalDateTime.now();
         switch (state.toUpperCase()) {
             case "ALL":
-                return bookingRepository.findAllByBookerId(bookerId, pageable).
-                        map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByBookerId(bookerId, pageable)
+                        .map(bookingMapper::toBookingDto);
             case "WAITING":
-                return bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.WAITING, pageable).
-                        map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.WAITING, pageable)
+                        .map(bookingMapper::toBookingDto);
             case "REJECTED":
-                return bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.REJECTED, pageable).
-                        map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByBookerIdAndStatus(bookerId, Status.REJECTED, pageable)
+                        .map(bookingMapper::toBookingDto);
             case "PAST":
-                return bookingRepository.findAllByBookerIdAndEndBefore(bookerId, now, pageable).
-                        map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByBookerIdAndEndBefore(bookerId, now, pageable)
+                        .map(bookingMapper::toBookingDto);
             case "FUTURE":
-                return bookingRepository.findAllByBookerIdAndStartAfter(bookerId, now, pageable).
-                        map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByBookerIdAndStartAfter(bookerId, now, pageable)
+                        .map(bookingMapper::toBookingDto);
             case "CURRENT":
-                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfter(bookerId, now, now, pageable).
-                        map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfter(bookerId, now, now, pageable)
+                        .map(bookingMapper::toBookingDto);
             default:
                 throw new IllegalArgumentException("Unknown state: " + state);
         }
@@ -120,23 +120,23 @@ public class BookingServiceImpl implements BookingService {
         LocalDateTime now = LocalDateTime.now();
         switch (state.toUpperCase()) {
             case "ALL":
-                return bookingRepository.findAllByOwnerId(ownerId, pageable).
-                                map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByOwnerId(ownerId, pageable)
+                        .map(bookingMapper::toBookingDto);
             case "WAITING":
-                return bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.WAITING, pageable).
-                                map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.WAITING, pageable)
+                        .map(bookingMapper::toBookingDto);
             case "REJECTED":
-                return bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.REJECTED, pageable).
-                                map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByOwnerIdAndStatus(ownerId, Status.REJECTED, pageable)
+                        .map(bookingMapper::toBookingDto);
             case "PAST":
-                return bookingRepository.findAllByOwnerIdAndEndBefore(ownerId, now, pageable).
-                                map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByOwnerIdAndEndBefore(ownerId, now, pageable)
+                        .map(bookingMapper::toBookingDto);
             case "FUTURE":
-                return bookingRepository.findAllByOwnerIdAndStartAfter(ownerId, now, pageable).
-                                map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByOwnerIdAndStartAfter(ownerId, now, pageable)
+                        .map(bookingMapper::toBookingDto);
             case "CURRENT":
-                return bookingRepository.findAllByOwnerIdAndStartBeforeAndEndAfter(ownerId, now, now, pageable).
-                                map(bookingMapper::toBookingDto);
+                return bookingRepository.findAllByOwnerIdAndStartBeforeAndEndAfter(ownerId, now, now, pageable)
+                        .map(bookingMapper::toBookingDto);
             default:
                 throw new IllegalArgumentException("Unknown state: " + state);
         }
