@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -195,7 +192,7 @@ public class ItemControllerTest {
     void getItemsBySubstringShouldReturnItemsWhenValidSubstringProvided() throws Exception {
         List<ItemDto> items = List.of(new ItemDto());
         Page<ItemDto> page = new PageImpl<>(items);
-        when(itemService.getItemsBySubstring("test", PageRequest.of(0, 10))).thenReturn(page);
+        when(itemService.getItemsBySubstring(eq("test"), any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/items/search")
                         .param("text", "test"))
@@ -206,7 +203,7 @@ public class ItemControllerTest {
     @Test
     void getItemsBySubstringShouldReturnEmptyListWhenNoItemsFound() throws Exception {
         Page<ItemDto> page = new PageImpl<>(List.of());
-        when(itemService.getItemsBySubstring("empty", PageRequest.of(0, 10))).thenReturn(page);
+        when(itemService.getItemsBySubstring(eq("empty"), any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/items/search")
                         .param("text", "empty"))
