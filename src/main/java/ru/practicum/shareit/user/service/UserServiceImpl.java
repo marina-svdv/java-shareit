@@ -16,6 +16,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User must not be null");
+        }
         return userRepository.save(user);
     }
 
@@ -41,6 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
         userRepository.deleteById(userId);
     }
 

@@ -1,15 +1,20 @@
 package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.util.PageableUtil;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,19 +48,22 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> getAllBookingsByBooker(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                  @RequestParam(required = false, defaultValue = "ALL") String state) {
-        List<Booking> bookings = bookingService.getAllBookingsByBooker(userId, state);
-        return bookings.stream()
-                .map(bookingMapper::toBookingDto)
-                .collect(Collectors.toList());
+                                                   @RequestParam(required = false, defaultValue = "ALL") String state,
+                                                   @PositiveOrZero @RequestParam(defaultValue = "0") int from,
+                                                   @Positive @RequestParam(defaultValue = "10") int size) {
+        Sort sort = (state.equals("CURRENT")) ? Sort.by(Sort.Direction.ASC, "id") : Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageableUtil.createPageable(from, size, sort);
+        Page<BookingDto> pageResult = bookingService.getAllBookingsByBooker(userId, state, pageable);
+        return pageResult.getContent();
     }
 
     @GetMapping("/owner")
     public List<BookingDto> getAllBookingsByOwner(@RequestHeader("X-Sharer-User-Id") Long ownerId,
-                                                  @RequestParam(required = false, defaultValue = "ALL") String state) {
-        List<Booking> bookings = bookingService.getAllBookingsByOwner(ownerId, state);
-        return bookings.stream()
-                .map(bookingMapper::toBookingDto)
-                .collect(Collectors.toList());
+                                                  @RequestParam(required = false, defaultValue = "ALL") String state,
+                                                  @PositiveOrZero @RequestParam(defaultValue = "0") int from,
+                                                  @Positive @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageableUtil.createPageable(from, size, Sort.by(Sort.Direction.DESC, "id"));
+        Page<BookingDto> pageResult = bookingService.getAllBookingsByOwner(ownerId, state, pageable);
+        return pageResult.getContent();
     }
 }

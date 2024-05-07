@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.validation.ValidBookingDates;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -11,8 +13,11 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @ValidBookingDates
 public class BookingDto {
+    public static Object Status;
     Long id;
 
     @NotNull(message = "Item ID must not be null")

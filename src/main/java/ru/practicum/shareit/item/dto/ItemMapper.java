@@ -23,6 +23,7 @@ public class ItemMapper {
         dto.setDescription(item.getDescription());
         dto.setAvailable(item.getAvailable());
         dto.setOwnerId(item.getOwner().getId());
+        dto.setRequestId(item.getRequest() != null ? item.getRequest().getId() : null);
         return dto;
     }
 
@@ -39,12 +40,13 @@ public class ItemMapper {
         dto.setLastBooking(lastBooking);
         dto.setNextBooking(nextBooking);
         dto.setComments(comments != null ? comments : new ArrayList<>());
+        dto.setRequestId(item.getRequest() != null ? item.getRequest().getId() : null);
         return dto;
     }
 
     public ItemDto toItemDto(ItemPatchDto patchDto, ItemDto itemToUpdate) {
         if (patchDto == null) {
-            return null;
+            return itemToUpdate;
         }
         if (patchDto.getName() != null) {
             itemToUpdate.setName(patchDto.getName());
@@ -60,6 +62,9 @@ public class ItemMapper {
 
     public Item toItem(ItemDto dto, User owner) {
         if (dto == null) {
+            return null;
+        }
+        if (owner == null) {
             return null;
         }
         Item item = new Item();
